@@ -20,10 +20,8 @@ export const EditorPage = (props) => {
   const [newFile, setNewFile] = useState(true)
   const [result, setResult] = useState("")
   const [file, setFile] = useState({})
-
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const codeFiles = useSelector((state) => state.codeFiles.codeFiles)
-
   let tempCode = ""
 
   function onClick(){
@@ -42,7 +40,7 @@ export const EditorPage = (props) => {
   function onClickSave() {
     if (newFile) {
       let temp = {...file}
-      temp.code = tempCode
+      temp.code = text
       createFile(temp).then((value) => {
         if (value) {
           console.log("Success creating code file!")
@@ -71,14 +69,11 @@ export const EditorPage = (props) => {
           <GridItem>
             <Editor
               code={initialCode}
-              onChange={(e)=>{
-                if (typeof e === 'object'){
-                  tempCode = e.target.value
-                  console.log(e.target)
-                }
+              onChange={(e)=> {
+                setText(e.target.value)
               }
             } />
-            </GridItem>
+          </GridItem>
             <GridItem>
               <Grid
                 gap={1}>

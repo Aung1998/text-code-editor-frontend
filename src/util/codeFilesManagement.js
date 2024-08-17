@@ -1,7 +1,6 @@
 import Cookies from "universal-cookie";
 import axios from "axios";
 import store from "../store";
-import {loginSuccess, logoutSuccess, registerSuccess} from "../reducers/authSlice";
 import {updateFileSuccess} from "../reducers/codeFilesSlice";
 
 export const createFile = async ({name, code}) => {
@@ -61,7 +60,7 @@ export const updateFile = async ({id, code}) => {
   }
   const body = JSON.stringify({id, code})
   try {
-    const url = 'http://localhost:8000/api/codefiles/${id}'
+    const url = `http://localhost:8000/api/codefiles/${id}`
     const res = await axios.put(url, body, config)
     if (res.data.success){
       store.dispatch(updateFileSuccess(res.data.code_files))

@@ -20,11 +20,13 @@ export const Editor =({code="", onChange})=>{
     if (typeof onChange == 'function' && update.docChanged){
       onChange({ target: { value: doc } });
     }
-    console.log(update.view)
   })
 
   useEffect(() => {
-      editor.current = new EditorView({
+    if (!ref.current) return
+
+    if (!editor.current){
+      const view = new EditorView({
         state: EditorState.create({
           doc: code,
           extensions: [
@@ -37,12 +39,16 @@ export const Editor =({code="", onChange})=>{
         parent: ref.current
       })
 
-      return () => {
-        editor.current.destroy()
+    editor.current = view
+    }
+
+    return () => {
+      if (!ref.current){
+        editor.current?.destroy()
         editor.current = null
       }
-    },
-    [External, code, listenerExtension, onChange])
+    }
+    },[External, code, listenerExtension, onChange])
 
   useEffect(() => {
     if (editor.current && editor.current.state.doc.toString() !== code){
