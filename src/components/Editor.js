@@ -1,11 +1,10 @@
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef} from 'react'
 
 import {Annotation, EditorState} from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap } from '@codemirror/commands'
 import {python} from "@codemirror/lang-python";
 import {basicSetup} from "codemirror";
-import {updateFile} from "../util/codeFilesManagement";
 
 export const Editor =({code="", onChange})=>{
 
@@ -26,7 +25,7 @@ export const Editor =({code="", onChange})=>{
     if (!ref.current) return
 
     if (!editor.current){
-      const view = new EditorView({
+      editor.current = new EditorView({
         state: EditorState.create({
           doc: code,
           extensions: [
@@ -38,8 +37,6 @@ export const Editor =({code="", onChange})=>{
         }),
         parent: ref.current
       })
-
-    editor.current = view
     }
 
     return () => {
