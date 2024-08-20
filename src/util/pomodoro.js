@@ -21,7 +21,7 @@ export const updatePomodoro = async (pomodoro) => {
   }
   const body = JSON.stringify(pomodoro)
   try {
-    const url = `http://localhost:8000/api/codefiles/${id}`
+    const url = `http://localhost:8000/api/`
     const res = await axios.put(url, body, config)
     if (res.data.success){
       store.dispatch(updateFileSuccess(res.data.code_files))
