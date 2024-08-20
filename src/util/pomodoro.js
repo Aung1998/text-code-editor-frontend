@@ -4,7 +4,7 @@ import store from "../store";
 import {updateFileSuccess} from "../reducers/codeFilesSlice";
 
 
-export const updatePomodoro = (pomodoro) => {
+export const updatePomodoro = async (pomodoro) => {
   const cookie = new Cookies()
   const csrf = cookie.get('csrftoken')
 
@@ -19,7 +19,7 @@ export const updatePomodoro = (pomodoro) => {
     },
     mode: "same-origin"
   }
-  const body = JSON.stringify({id, code})
+  const body = JSON.stringify(pomodoro)
   try {
     const url = `http://localhost:8000/api/codefiles/${id}`
     const res = await axios.put(url, body, config)
