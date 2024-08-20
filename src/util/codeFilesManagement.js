@@ -14,8 +14,7 @@ export const createFile = async ({name, code}) => {
   const config = {
     'Access-Control-Allow-Credentials': true,
     headers:{
-      'Content-Type': 'application/json',
-      'X-CSRFToken':csrf
+      'Content-Type': 'application/json'
     },
     mode: "same-origin"
   }
@@ -54,7 +53,6 @@ export const updateFile = async ({id, code}) => {
     'Access-Control-Allow-Credentials': true,
     headers:{
       'Content-Type': 'application/json',
-      'X-CSRFToken':csrf
     },
     mode: "same-origin"
   }

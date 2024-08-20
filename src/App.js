@@ -23,6 +23,7 @@ import {Provider} from "react-redux";
 import store from "./store";
 import {LogoutPage} from "./pages/LogoutPage";
 import CSRFToken from "./util/CSRFToken";
+import {PomodoroTimerSettingPage} from "./pages/PomodoroTimerSettingPage";
 
 function App() {
   useEffect(() => {
@@ -43,6 +44,7 @@ function App() {
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/logout' element={<LogoutPage/>}/>
                 <Route path='/signup' element={<SignupPage/>}/>
+                <Route path='/pomodoroSetting' element={<PomodoroTimerSettingPage/>} />
               </Routes>
             </GridItem>
           </Grid>

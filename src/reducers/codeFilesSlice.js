@@ -9,7 +9,6 @@ const codeFiles = createSlice({
   initialState,
   reducers: {
     createFileSuccess: (state, action) => {
-      console.log(action.payload)
       state.codeFiles = action.payload
     },
     getFileSuccess: (state, action) => {

@@ -9,7 +9,8 @@ import PomodoroTimer from "./PomodoroTimer";
 
 export const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const pomodoroSetting = useSelector((state) => state.auth.pomodoro)
+  const pomodoroSetting = useSelector((state) => state.pomodoro)
+
   const [pomodoro, setPomodoro] = useState(pomodoroSetting)
   const [PomodoroTimerConmponent, setPomodoroTimerConmponent] = useState(()=>(PomodoroTimer))
   useEffect(() => {
@@ -40,6 +41,9 @@ export const Navbar = () => {
           Login
         </RouteLink>
       }
+      <RouteLink to={'/pomodoroSetting'}>
+        Pomodoro Setting
+      </RouteLink>
       <PomodoroTimerConmponent />
     </HStack>
   )

@@ -20,9 +20,7 @@ export const EditorPage = (props) => {
   const [newFile, setNewFile] = useState(true)
   const [result, setResult] = useState("")
   const [file, setFile] = useState({})
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const codeFiles = useSelector((state) => state.codeFiles.codeFiles)
-  let tempCode = ""
 
   function onClick(){
      // TODO: Send REST REQUEST TO DJANGO SERVER AND SET RESPONSE INTO result

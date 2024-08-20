@@ -8,7 +8,6 @@ import {
   Box,
   Text,
   Heading,
-  Link as ChakraLink
 } from "@chakra-ui/react";
 import {Link as RouteLink, useNavigate} from "react-router-dom";
 import {login} from "../util/auth";

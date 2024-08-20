@@ -3,6 +3,7 @@ import axios from "axios";
 import store from "../store";
 import {loginSuccess, logoutSuccess, registerSuccess} from "../reducers/authSlice";
 import {getFileSuccess} from "../reducers/codeFilesSlice";
+import {loadPomodoroSuccess, revertPomodoroSuccesss} from "../reducers/pomodoroSlice";
 
 export const getCSRF = async () => {
   const cookie = new Cookies()
@@ -37,6 +38,7 @@ export const login = async ({username, password}) => {
     if (res.data.success){
       store.dispatch(loginSuccess(res.data))
       store.dispatch(getFileSuccess(res.data.code_files))
+      store.dispatch(loadPomodoroSuccess(res.data.pomodoro_setting))
       return true
     }
   } catch (e) {
@@ -67,9 +69,9 @@ export const logout = async() => {
     console.log(url)
     const res = await axios.post(url, config)
     if (res.data.success){
-      console.log("Success!")
       store.dispatch(logoutSuccess())
       store.dispatch(getFileSuccess([]))
+      store.dispatch(revertPomodoroSuccesss())
       return true
     }
   }
