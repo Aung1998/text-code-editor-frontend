@@ -10,24 +10,25 @@ import PomodoroTimer from "./PomodoroTimer";
 export const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const pomodoroSetting = useSelector((state) => state.pomodoro)
+  const [pomodoro, setPomodoro] = useState(pomodoroSetting.pomodoro)
+  const [PomodoroTimerComponent, setPomodoroTimerComponent] = useState(()=>(PomodoroTimer))
 
-  const [pomodoro, setPomodoro] = useState(pomodoroSetting)
-  const [PomodoroTimerConmponent, setPomodoroTimerConmponent] = useState(()=>(PomodoroTimer))
   useEffect(() => {
-    if(isAuthenticated){
-      setPomodoro(pomodoroSetting)
-      console.log(pomodoro)
-      setPomodoroTimerConmponent(()=>(()=>{
-        return <PomodoroTimerConmponent
-        focus={pomodoro.working_minutes}
-        longBreak={pomodoro.long_break_minutes}
-        shortBreak={pomodoro.short_break_minutes}
-        interval={pomodoro.intervals}/>}))
-    }
-    else{
-      setPomodoroTimerConmponent(()=> PomodoroTimer)
-    }
-  }, [isAuthenticated, pomodoroSetting]);
+      if (isAuthenticated) {
+        setPomodoro(pomodoroSetting.pomodoro)
+        setPomodoroTimerComponent(() => (() => {
+          return <PomodoroTimer
+            focus={pomodoro.working_minutes}
+            longBreak={pomodoro.long_break_minutes}
+            shortBreak={pomodoro.short_break_minutes}
+            interval={pomodoro.intervals}/>
+        }));
+      } else {
+        setPomodoroTimerComponent(() => PomodoroTimer)
+      }
+    },
+    [isAuthenticated, pomodoro, pomodoroSetting]);
+
   return (
     <HStack height="5em">
       <RouteLink to={'/'}>
@@ -44,7 +45,10 @@ export const Navbar = () => {
       <RouteLink to={'/pomodoroSetting'}>
         Pomodoro Setting
       </RouteLink>
-      <PomodoroTimerConmponent />
+      <RouteLink to={'/filedDashboard'}>
+        File Dashboard
+      </RouteLink>
+      <PomodoroTimerComponent />
     </HStack>
   )
 }

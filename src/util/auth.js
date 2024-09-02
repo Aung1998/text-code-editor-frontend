@@ -3,7 +3,7 @@ import axios from "axios";
 import store from "../store";
 import {loginSuccess, logoutSuccess, registerSuccess} from "../reducers/authSlice";
 import {getFileSuccess} from "../reducers/codeFilesSlice";
-import {loadPomodoroSuccess, revertPomodoroSuccesss} from "../reducers/pomodoroSlice";
+import {loadPomodoroSuccess, revertPomodoroSuccess} from "../reducers/pomodoroSlice";
 
 export const getCSRF = async () => {
   const cookie = new Cookies()
@@ -62,7 +62,6 @@ export const logout = async() => {
     },
     mode: "same-origin"
   }
-  console.log("Logging out...")
   try {
     console.log("Logging out...")
     const url = `http://localhost:8000/api/account/logout`
@@ -71,7 +70,7 @@ export const logout = async() => {
     if (res.data.success){
       store.dispatch(logoutSuccess())
       store.dispatch(getFileSuccess([]))
-      store.dispatch(revertPomodoroSuccesss())
+      store.dispatch(revertPomodoroSuccess())
       return true
     }
   }
@@ -80,6 +79,7 @@ export const logout = async() => {
   }
   return false
 }
+
 export const register =  async ({username, email, password}) => {
   const cookies = new Cookies()
   const csrf = cookies.get('csrftoken')

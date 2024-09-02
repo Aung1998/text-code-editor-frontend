@@ -1,7 +1,7 @@
 import Cookies from "universal-cookie";
 import axios from "axios";
 import store from "../store";
-import {updateFileSuccess} from "../reducers/codeFilesSlice";
+import {updatePomodoroSuccess} from "../reducers/pomodoroSlice";
 
 
 export const updatePomodoro = async (pomodoro) => {
@@ -21,10 +21,10 @@ export const updatePomodoro = async (pomodoro) => {
   }
   const body = JSON.stringify(pomodoro)
   try {
-    const url = `http://localhost:8000/api/`
+    const url = `http://localhost:8000/api/setting/pomodoro`
     const res = await axios.put(url, body, config)
     if (res.data.success){
-      store.dispatch(updateFileSuccess(res.data.code_files))
+      store.dispatch(updatePomodoroSuccess(res.data.pomodoro))
       return true
     }
   } catch (e) {

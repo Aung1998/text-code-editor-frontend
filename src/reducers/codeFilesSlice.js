@@ -9,7 +9,7 @@ const codeFiles = createSlice({
   initialState,
   reducers: {
     createFileSuccess: (state, action) => {
-      state.codeFiles = action.payload
+      state.codeFiles.push(action.payload)
     },
     getFileSuccess: (state, action) => {
       state.codeFiles = action.payload
@@ -18,7 +18,8 @@ const codeFiles = createSlice({
       state.codeFiles = action.payload
     },
     deleteFileSuccess: (state, action) => {
-      state.codeFiles = action.payload
+      const id = action.payload
+      state.codeFiles = state.codeFiles.filter((codeFile) => codeFile.id !== id)
     }
    }
 })

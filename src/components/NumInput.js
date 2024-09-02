@@ -11,8 +11,8 @@ import {
 
 export const NumInput = ({label, initialNumber, onChange}) => {
   return (
-    <HStack>
-      <Text>{label}</Text>
+    <div className={'content-center'}>
+      <Text align={'left'}>{label}</Text>
       <NumberInput size={'md'} step={5} defaultValue={initialNumber} min={5}>
         <NumberInputField onChange={onChange}/>
         <NumberInputStepper>
@@ -20,6 +20,6 @@ export const NumInput = ({label, initialNumber, onChange}) => {
           <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-    </HStack>
+    </div>
   )
 }

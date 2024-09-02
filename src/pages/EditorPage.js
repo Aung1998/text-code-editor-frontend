@@ -1,76 +1,176 @@
 
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Button,
   Input,
   Grid,
   GridItem,
-  FormControl, InputLeftElement, InputGroup, ButtonGroup
+  FormControl, InputLeftElement, InputGroup, ButtonGroup, InputRightElement
 } from "@chakra-ui/react";
 
 import {useEffect, useState} from "react";
 import {OutputDisplay} from "../components/OutputDisplay";
-import {createFile} from "../util/codeFilesManagement";
+import {createFile, getOutput, updateFile} from "../util/codeFilesManagement";
 import {useSelector} from "react-redux";
 import {Editor} from "../components/Editor";
+import {useLocation} from "react-router-dom";
+import {Conversation} from "../components/Conversation";
 
-export const EditorPage = (props) => {
-  const [text, setText] = useState("");
-  const [initialCode, setInitialCode] = useState("")
-  const [input, setInput] = useState("");
+export const EditorPage = () => {
+
+  const location = useLocation();
+
+  const [fileName, setFileName] = useState('')
+  const [text, setText] = useState('print(\'Hello World\')');
+  const [codeInput, setCodeInput] = useState("");
   const [newFile, setNewFile] = useState(true)
   const [result, setResult] = useState("")
-  const [file, setFile] = useState({})
   const codeFiles = useSelector((state) => state.codeFiles.codeFiles)
-
-  function onClick(){
-     // TODO: Send REST REQUEST TO DJANGO SERVER AND SET RESPONSE INTO result
-    setResult()
-  }
+  const [defaultName, setDefaultName] = useState('')
+  const [id, setID] = useState(null)
+  const [alertHide, setAlertHide] = useState(true)
+  const [alertText, setAlertText] = useState("")
+  const [alertTitle, setAlertTitle] = useState('Something Went Wrong!')
+  const [alertStatus, setAlertStatus] = useState('error')
+  const [fileDate, setFileDate] = useState(Date.now().toString())
 
   useEffect(() => {
-    const fileNames = codeFiles.map(value => value.name);
-    if (file.name in fileNames){
+    if (location.state) {
+      console.log(location.state.fileId)
       setNewFile(false)
-      // set initial code.
+      setID(location.state.fileId)
+      setFileName(location.state.fileName)
+      setDefaultName(location.state.fileName)
+    }}, []);
+
+  useEffect(() => {
+    if (codeFiles){
+      const codeFileNames = codeFiles.filter((codeFile) => codeFile.name === fileName)
+      if (codeFileNames.length !== 0){
+        setNewFile(false)
+        alertError("You're editing old file", 'Old file warning!','warning')
+      }
+      else{
+        setNewFile(true)
+      }
     }
-  }, [codeFiles, file.name]);
+  }, [codeFiles,fileName]);
+
+  function alertError(alertMessage, title='Something went wrong!', status='error'){
+    let count = 0
+    setAlertHide(false)
+    setAlertStatus(status)
+    setAlertTitle(title)
+    setAlertText(alertMessage)
+    const interval = setInterval(() => {
+      count = count + 1
+      if (count >= 5){
+        clearInterval(interval)
+        setAlertHide(true)
+      }
+    }, 1000)
+  }
 
   function onClickSave() {
     if (newFile) {
-      let temp = {...file}
-      temp.code = text
-      createFile(temp).then((value) => {
+      const file = {
+        "text": text,
+        "name":fileName,
+      }
+      createFile(file).then((value) => {
         if (value) {
-          console.log("Success creating code file!")
           setNewFile(false)
         }
+        else{
+          alertError("Maybe you haven't login yet!")
+        }
       })
-    } else{
-      // put the file instead
+    } else {
+      if(location.state){
+        setFileDate(location.state.created_date)
+      }
+      const temp = {
+        id: id,
+        name: fileName,
+        code: text,
+        created_date: fileDate
+      }
+      updateFile(temp).then((value) => {
+        if (value) {
+          console.log("Success saving code file!")
+          setNewFile(false)
+        }
+        else{
+          alertError("the server may not be responding!")
+        }
+      })
     }
+  }
+
+  function onClickRun(){
+    getOutput({code:text, codeInput:codeInput}).then((value) => {
+      if(value.success){
+        setResult(value.stdout)
+      }
+      else{
+      alertError("something went wrong running the code!")
+      }
+    })
+  }
+
+  function onClickDownload(){
+    const element = document.createElement("a")
+    const file = new Blob([text], {
+      type: 'text/plain',
+    })
+    element.href = URL.createObjectURL(file)
+    element.download = `${fileName}.py`
+    document.body.appendChild(element)
+    element.click()
   }
 
   return (
     <Grid templateRows={'50px 1fr'} gap={3}>
+      <Alert hidden={alertHide} status={alertStatus}>
+        <AlertIcon />
+        <AlertTitle>{alertTitle}</AlertTitle>
+        <AlertDescription>{alertText}</AlertDescription>
+      </Alert>
       <GridItem>
-        <Input size={'lg'} placeholder={"Enter your file name here..."} onChange={(e)=>{
-          let temp = {...file}
-          console.log(e.target)
-          temp.name = e.target.value
-          setFile(temp)
-        }}/>
+        <InputGroup size={'lg'}>
+          <Input pr='4.5rem' defaultValue={defaultName}  placeholder={"Enter your file name here..."} onChange={(e)=>{
+            setFileName(e.target.value)
+            console.log([fileName, e.target.value])
+          }}/>
+          <InputRightElement width='4.5rem'>
+            <Button onClick={() => {
+              setFileName('')
+              setNewFile(true)
+            }}>New File</Button>
+          </InputRightElement>
+        </InputGroup>
       </GridItem>
       <GridItem>
         <Grid
           gridTemplateColumns={'1fr 1fr 1fr'}
           gap="1">
           <GridItem>
-            <Editor
-              code={initialCode}
-              onChange={(e)=> {
-                setText(e.target.value)
-              }
-            } />
+            {
+              (newFile && location.state) ?
+                <Editor
+                  code={location.state.code}
+                  onChange={(e)=> {
+                    setText(e.target.value)
+                  }
+                  } /> :
+                <Editor
+                  code={text}
+                  onChange={(e)=> {
+                    setText(e.target.value)}} />
+            }
           </GridItem>
             <GridItem>
               <Grid
@@ -85,14 +185,14 @@ export const EditorPage = (props) => {
                       w={[100, 200]}>
                       <Input
                         placeholder={"Enter your input"}
-                        onChange={(e)=> setInput(e)} />
+                        onChange={(e)=> setCodeInput(e.target.value)} />
                     </InputLeftElement>
                   </InputGroup>
                 </GridItem>
               </Grid>
             </GridItem>
             <GridItem>
-              Implement Chatbot here
+              <Conversation />
             </GridItem>
             <GridItem>
               <Grid gap={2}
@@ -103,7 +203,7 @@ export const EditorPage = (props) => {
                       colorScheme='blue'
                       size='md'
                       className={"blue"}
-                      onClick={onClick}>
+                      onClick={onClickRun}>
                       Run
                     </Button>
                     <Button
@@ -112,6 +212,13 @@ export const EditorPage = (props) => {
                       className={"blue"}
                       onClick={onClickSave}>
                       Save
+                    </Button>
+                    <Button
+                      colorScheme='blue'
+                      size='md'
+                      className={"blue"}
+                      onClick={onClickDownload}>
+                      Download
                     </Button>
                   </ButtonGroup>
                 </FormControl>

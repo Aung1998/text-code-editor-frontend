@@ -16,7 +16,7 @@ const pomodoroSlice = createSlice({
     loadPomodoroSuccess: (state, action) => {
       state.pomodoro = action.payload
     },
-    upDatePomodoroSuccess: (state, action) => {
+    updatePomodoroSuccess: (state, action) => {
       state.pomodoro = action.payload
     },
     revertPomodoroSuccess: (state) => {
@@ -25,5 +25,5 @@ const pomodoroSlice = createSlice({
   }
 })
 
-export const {loadPomodoroSuccess, upDatePomodoroSucces, revertPomodoroSuccesss} = pomodoroSlice.actions
+export const {loadPomodoroSuccess, updatePomodoroSuccess, revertPomodoroSuccess} = pomodoroSlice.actions
 export default pomodoroSlice.reducer

@@ -17,6 +17,7 @@ export const Editor =({code="", onChange})=>{
     const state = update.state
     const doc = state.doc.toString()
     if (typeof onChange == 'function' && update.docChanged){
+      console.log(doc)
       onChange({ target: { value: doc } });
     }
   })
@@ -46,14 +47,6 @@ export const Editor =({code="", onChange})=>{
       }
     }
     },[External, code, listenerExtension, onChange])
-
-  useEffect(() => {
-    if (editor.current && editor.current.state.doc.toString() !== code){
-      editor.current.dispatch({
-         changes: { from: 0, to: editor.current.state.doc.length, insert: "" }
-      })
-    }
-  }, [code]);
 
   return <div className={'text-left'} ref={ref}></div>
 }
