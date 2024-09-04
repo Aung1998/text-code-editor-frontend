@@ -78,9 +78,9 @@ export const LoginPage = () => {
             </Box>
             <Text>
               New User?
-              <RouteLink to={'/signup'}>
+              <RouteLink className={'text-blue-600'} to={'/signup'}>
                 Sign up
-              </RouteLink>:
+              </RouteLink>
             </Text>
           </Box>
         </Box>

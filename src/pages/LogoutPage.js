@@ -10,6 +10,6 @@ export const LogoutPage = () => {
     logout().then((value)=>{
       navigate('/login')
     })
-  }, [])
+  })
   return <></>
 }

@@ -17,7 +17,6 @@ export const Editor =({code="", onChange})=>{
     const state = update.state
     const doc = state.doc.toString()
     if (typeof onChange == 'function' && update.docChanged){
-      console.log(doc)
       onChange({ target: { value: doc } });
     }
   })

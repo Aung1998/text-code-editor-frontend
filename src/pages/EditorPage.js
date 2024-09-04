@@ -39,7 +39,6 @@ export const EditorPage = () => {
 
   useEffect(() => {
     if (location.state) {
-      console.log(location.state.fileId)
       setNewFile(false)
       setID(location.state.fileId)
       setFileName(location.state.fileName)
@@ -85,7 +84,7 @@ export const EditorPage = () => {
           setNewFile(false)
         }
         else{
-          alertError("Maybe you haven't login yet!")
+          alertError("Please check if you have logged in or your file name")
         }
       })
     } else {
@@ -100,7 +99,6 @@ export const EditorPage = () => {
       }
       updateFile(temp).then((value) => {
         if (value) {
-          console.log("Success saving code file!")
           setNewFile(false)
         }
         else{
@@ -143,7 +141,6 @@ export const EditorPage = () => {
         <InputGroup size={'lg'}>
           <Input pr='4.5rem' defaultValue={defaultName}  placeholder={"Enter your file name here..."} onChange={(e)=>{
             setFileName(e.target.value)
-            console.log([fileName, e.target.value])
           }}/>
           <InputRightElement width='4.5rem'>
             <Button onClick={() => {
