@@ -5,6 +5,9 @@ import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap } from '@codemirror/commands'
 import {python} from "@codemirror/lang-python";
 import {basicSetup} from "codemirror";
+import {search} from "@codemirror/search"
+import SearchPanel from "./SearchAndReplacePannel";
+import {createRoot} from "react-dom/client";
 
 export const Editor =({code="", onChange})=>{
 
@@ -32,7 +35,15 @@ export const Editor =({code="", onChange})=>{
             basicSetup,
             python(),
             keymap.of(defaultKeymap),
-            listenerExtension
+            listenerExtension,
+            search({
+              createPanel: (view) => {
+                const dom = document.createElement("div")
+                const root = createRoot(dom)
+                root.render(<SearchPanel view={view}/>)
+                return {dom}
+              }
+            })
           ],
         }),
         parent: ref.current

@@ -1,5 +1,4 @@
 import {
-  HStack,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,

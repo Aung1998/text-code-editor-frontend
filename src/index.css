@@ -19,3 +19,8 @@ code {
 .cm-editor {
   max-height: 388px;
 }
+
+.output-text{
+  min-height: 388px;
+  max-height: 388px;
+}

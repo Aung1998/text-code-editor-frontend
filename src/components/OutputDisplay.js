@@ -10,7 +10,7 @@ export const OutputDisplay = ({result}) => {
   }, [result]);
   return (
     <div className='bg-black max-w-96 max-h-96 h-96'>
-      <p className='text-green-600'>
+      <p className='output-text text-green-600'>
         {displayText}
       </p>
     </div>)
