@@ -21,9 +21,9 @@ export const Chat = ({username, message}) => {
         <Text>{username}</Text>
       </StackItem>
       <StackItem alignItems={'flex-start'}>
-        {message.includes("python")?
+        {message.includes("python") && username === 'Chat Code Bot'?
           <Code bgColor={bgColour} textAlign='left' whiteSpace='pre-line'>
-            {message.replace("```", "").replace("```", "").replace('python', "")}
+            {message.replace("```", "").replace("```", "").replace('python', "python code below")}
           </Code>
           :
           <Text textAlign='left' whiteSpace="pre-line">{message}</Text>

@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
-import {Text} from "@chakra-ui/react";
+import {Button, HStack, Text} from "@chakra-ui/react";
 const PomodoroTimer = ({focus=25, shortBreak=5, longBreak=30, interval=4}) => {
   const [sec, setSec] = useState(0)
   const [longBreakTime, setLongBreakTime] = useState(false)
   const [breakTime, setBreakTime] = useState(false)
   const [pomodoroCount, setPomodoroCount] = useState(interval)
   const [minute, setMinute] = useState(focus)
+  const [message, setMessage] = useState('Pomodoro Timer has not started yet')
   const [active, setActive] = useState(false)
-  const [css, setCSS] = useState('bg-green-600')
 
   useEffect(()=> {
     if (active) {
@@ -19,34 +19,26 @@ const PomodoroTimer = ({focus=25, shortBreak=5, longBreak=30, interval=4}) => {
           setMinute(minute -1)
           setSec(59)
         }
-        if (minute===0 && sec === 0){
-          if (breakTime===false){
-            setBreakTime(true)
-            setCSS('bg-orange-600')
+        if (minute===0 && sec === 0 && !longBreakTime){
+          if (!breakTime){
             setMinute(shortBreak-1)
-
-          }
-          else if (longBreakTime){
-            setMinute(focus-1)
-
-            setLongBreakTime(false)
+            setMessage("Take a short break!")
+            setPomodoroCount((pomodoroCount) => pomodoroCount - 1)
           }
           else{
-            setBreakTime(false)
-            setPomodoroCount(pomodoroCount-1)
-            if(pomodoroCount === 0){
-              setCSS('bg-red-600')
-              console.log("Long break time!")
-              setLongBreakTime(true)
-              setMinute(longBreak-1)
-              setPomodoroCount(interval)
-            }
-            else{
-              setMinute(focus-1)
-
-              setPomodoroCount(pomodoroCount-1)
-            }
+            setMessage(()=>"Focus on your work!")
+            setMinute(focus-1)
           }
+          if (pomodoroCount===0){
+            setLongBreakTime(true)
+          }
+          setBreakTime(!breakTime)
+        }
+        if (longBreakTime){
+          setMessage(()=> "Take a long break!")
+          setMinute(longBreak-1)
+          setLongBreakTime(false)
+          setPomodoroCount(interval)
         }
         return clearInterval(countdown)
       }, 1000)
@@ -57,8 +49,19 @@ const PomodoroTimer = ({focus=25, shortBreak=5, longBreak=30, interval=4}) => {
   const secondText = sec>9? sec : '0' + sec
 
   return (
-    <div className={css} onClick={()=>setActive(!active)}>
-      <Text>{minuteText+":"+secondText}</Text>
-    </div>)
+    <HStack>
+      <Text>{minuteText+":"+secondText} </Text>
+      <Text>{message}</Text>
+      <Button size={'md'} onClick={()=> {
+        setActive(true)
+        if(!breakTime) {
+          setMessage("Focus time!")
+        }
+      }}>Start Pomodoro</Button>
+      <Button size={'md'} onClick={()=> {
+        setActive(false)
+      }}>Pause Pomodoro</Button>
+    </HStack>
+  )
 }
 export default PomodoroTimer
