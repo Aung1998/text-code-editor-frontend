@@ -75,9 +75,10 @@ export const EditorPage = () => {
 
   function onClickSave() {
     if (newFile) {
+      console.log(text)
       const file = {
-        "text": text,
-        "name":fileName,
+        code: text,
+        name: fileName,
       }
       createFile(file).then((value) => {
         if (value) {

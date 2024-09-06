@@ -1,7 +1,7 @@
 import Cookies from "universal-cookie";
 import axios from "axios";
 import store from "../store";
-import {loginSuccess, logoutSuccess, registerSuccess} from "../reducers/authSlice";
+import {loginSuccess, logoutSuccess} from "../reducers/authSlice";
 import {getFileSuccess} from "../reducers/codeFilesSlice";
 import {loadPomodoroSuccess, revertPomodoroSuccess} from "../reducers/pomodoroSlice";
 
@@ -102,8 +102,6 @@ export const register =  async ({username, email, password}) => {
     console.log(url)
     const res = await axios.post(url, body, config)
     if (res.data.success){
-      console.log("Success!")
-      store.dispatch(registerSuccess())
       return true
     }
   } catch (e) {
