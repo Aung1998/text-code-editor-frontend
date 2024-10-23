@@ -29,7 +29,7 @@ export const createFile = async ({name, code}) => {
   })
   console.log(body)
   try {
-    const url = 'http://localhost:8000/api/codefiles/save'
+    const url = `${process.env.BACKEND_URL}/api/codefiles/save`
     const res = await axios.post(url, body, config)
     if (res.data.success){
       store.dispatch(createFileSuccess(res.data.code_file))
@@ -58,7 +58,7 @@ export const updateFile = async ({id, name, code, modified_date=Date.now(), crea
   }
   const body = JSON.stringify({id, name, code, modified_date, created_date})
   try {
-    const url = `http://localhost:8000/api/codefiles/save/${id}`
+    const url = `${process.env.BACKEND_URL}/api/codefiles/save/${id}`
     const res = await axios.put(url, body, config)
     if (res.data.success){
       store.dispatch(updateFileSuccess(res.data.code_files))
@@ -90,7 +90,7 @@ export const deleteFile = async (id) => {
   const body = JSON.stringify(id)
 
   try {
-    const url = `http://localhost:8000/api/codefiles/delete/${id}`
+    const url = `${process.env.BACKEND_URL}/api/codefiles/delete/${id}`
     const res = await axios.delete(url, body, config)
     if (res.data.success) {
       store.dispatch(deleteFileSuccess(id))
@@ -119,7 +119,8 @@ export const getFiles = async () => {
   }
 
   try {
-    const url = 'http://localhost:8000/api/codefiles'
+
+    const url =  `${process.env.BACKEND_URL}/api/codefiles`
     const res = await axios.get(url, config)
     if (res.data.success){
       store.dispatch(getFileSuccess(res.data.code_files))
@@ -150,7 +151,7 @@ export const getOutput =async ({code, codeInput = ""}) => {
   const body = JSON.stringify({code, codeInput})
 
   try {
-    const url = `http://localhost:8000/api/codefiles/execute`
+    const url = `${process.env.BACKEND_URL}/api/codefiles/execute`
     const res = await axios.post(url, body, config)
     if (res.data.success){
       return res.data

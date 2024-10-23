@@ -21,7 +21,7 @@ export const updatePomodoro = async (pomodoro) => {
   }
   const body = JSON.stringify(pomodoro)
   try {
-    const url = `http://localhost:8000/api/setting/pomodoro`
+    const url = `${process.env.BACKEND_URL}/api/setting/pomodoro`
     const res = await axios.put(url, body, config)
     if (res.data.success){
       store.dispatch(updatePomodoroSuccess(res.data.pomodoro))

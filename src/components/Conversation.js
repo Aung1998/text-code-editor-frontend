@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {Box, Button, HStack, Input, Stack, StackItem, Text, VStack} from "@chakra-ui/react";
+import {Box, Button, HStack, Input, StackItem, Text, VStack} from "@chakra-ui/react";
 import {Chat} from "./Chat";
 
 
@@ -13,9 +13,8 @@ export const Conversation = () => {
 
   useEffect(() => {
       if (isAuthenticated) {
-        const socket = new WebSocket('ws://localhost:8000/ws/chatbot')
+        const socket = new WebSocket(`${process.env.WEB_SOCKET_URL}/ws/chatbot`)
         socket.onopen = () => {
-          console.log("Connected")
           setChatServer(socket)
         }
 
@@ -25,7 +24,6 @@ export const Conversation = () => {
             username: "Chat Code Bot",
             message: message_data.response
           }
-          console.log(res)
 
           setMessagesHistory((previous) => [...previous, res])
         }

@@ -8,7 +8,7 @@ import {loadPomodoroSuccess, revertPomodoroSuccess} from "../reducers/pomodoroSl
 export const getCSRF = async () => {
   const cookie = new Cookies()
   try{
-    const res = await axios.get('http://localhost:8000/api/csrf')
+    const res = await axios.get(`${process.env.BACKEND_URL}/api/csrf`)
     return cookie.get('csrftoken')
   } catch(e){
     console.log(e)
@@ -33,7 +33,7 @@ export const login = async ({username, password}) => {
   }
   const body = JSON.stringify({username, email:"", password})
   try {
-    const url = `http://localhost:8000/api/account/login`
+    const url = `${process.env.BACKEND_URL}/api/account/login`
     const res = await axios.post(url, body, config)
     if (res.data.success){
       store.dispatch(loginSuccess(res.data))
@@ -64,7 +64,7 @@ export const logout = async() => {
   }
   try {
     console.log("Logging out...")
-    const url = `http://localhost:8000/api/account/logout`
+    const url = `${process.env.BACKEND_URL}/api/account/logout`
     console.log(url)
     const res = await axios.post(url, config)
     if (res.data.success){
@@ -98,7 +98,7 @@ export const register =  async ({username, email, password}) => {
 
   const body = JSON.stringify({username, email, password})
   try {
-    const url = `http://localhost:8000/api/account/signup`
+    const url = `${process.env.BACKEND_URL}/api/account/signup`
     console.log(url)
     const res = await axios.post(url, body, config)
     if (res.data.success){
